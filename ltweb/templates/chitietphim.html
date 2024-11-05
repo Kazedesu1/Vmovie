@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Phim</title>
+    <link rel="stylesheet" href="/static/chitietphim.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <button>&#9776; Menu</button>
+        <h1>Chi Tiết Phim</h1>
+    </header>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="movie-details">
+            <!-- Movie Image -->
+            <div class="movie-image">
+                <img src="{{ movie['poster'] }}" alt="Poster của {{ movie['name'] }}">
+            </div>
+
+            <!-- Movie Trailer -->
+            <div class="movie-trailer">
+                <iframe width="560" height="315" src="{{ movie['trailer'] }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <!-- Movie Information -->
+            <div class="movie-info">
+                <h2>{{ movie['movieName'] }}</h2>
+                <p><strong>Đạo diễn:</strong> {{ movie['director'] }}</p>
+                <p><strong>Thể loại:</strong> {{ movie['genre'] }}</p>
+                <p><strong>Khởi chiếu:</strong> {{ movie['date'] }}</p>
+                <p><strong>Thời lượng:</strong> {{ movie['time'] }} phút</p>
+                <p><strong>Ngôn ngữ:</strong> {{ movie['language'] }}</p>
+                <p><strong>Rated:</strong> {{ movie['rated'] }}</p>
+                <p><strong>Mô tả:</strong> {{ movie['description'] }}</p>
+            </div>
+
+            <!-- Rating and Buttons -->
+            <div class="rating-and-buttons">
+                <!-- Movie Rating -->
+                <div class="rating">
+                    {{ movie['score'] }}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-gr">
+                    <button onclick="toggleModal()">Đặt vé</button>
+                    <button onclick="toggleForm('review-form')">Đánh giá</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="overlay" id="bookingModal">
+        <div class="modal">
+            <!-- Date Selection -->
+            <h2>Chọn lịch chiếu</h2>
+            <div class="button-group">
+                <button>5/11</button>
+                <button>6/11</button>
+                <button>7/11</button>
+                <button>8/11</button>
+                <button>9/11</button>
+                <button>10/11</button>
+            </div>
+    
+            <!-- Time Selection -->
+            <h2>Chọn giờ chiếu</h2>
+            <div class="button-group">
+                <button>10:00</button>
+                <button>10:30</button>
+                <button>11:00</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Modal and Form Toggle -->
+    <script>
+        // Toggle booking modal visibility
+        function toggleModal() {
+            const modal = document.getElementById('bookingModal');
+            modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'flex' : 'none';
+        }
+
+        // Toggle review form visibility
+        function toggleForm(formId) {
+            const form = document.getElementById(formId);
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('bookingModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
