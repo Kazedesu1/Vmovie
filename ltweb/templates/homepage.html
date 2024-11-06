@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PopcornCinema</title>
+    <link rel="icon" type="image/jpg" href="/static/logo.svg">
+    <link rel="stylesheet" href="/static/deshomepage.css">
+    <style>
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="left">
+            <a href="{{ url_for('homepage') }}">
+                <img id="logo" src="{{ url_for('static', filename='logo2.svg') }}" alt="PopcornCinema Logo">
+                <div class="logo-text">POPCORNCINEMA</div>
+            </a>
+        </div>
+        
+        <div class="menu">
+            <a href="#">RẠP PHIM</a>
+            <a href="#">VÉ CỦA TÔI</a>
+            <a href="#">TIN MỚI VÀ ƯU ĐÃI</a>
+        </div>
+        
+        <div class="right">
+            <div class="auth-links">
+                <a href="#">Đăng nhập</a> | 
+                <a href="#">Đăng ký</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Slideshow -->
+    <div class="slideshow-container">
+        <div class="slides">
+            <div class="slide">
+                <img src="/static/slideshow/img1.jpg" alt="Slide 1">
+            </div>
+            <div class="slide">
+                <img src="/static/slideshow/img5.jpg" alt="Slide 5">
+            </div>
+            <div class="slide">
+                <img src="/static/slideshow/img6.png" alt="Slide 6">
+            </div>
+            <div class="slide">
+                <img src="/static/slideshow/img7.png" alt="Slide 7">
+            </div>
+        </div>
+        <!-- Navigation buttons -->
+        <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+        <a class="next" onclick="changeSlide(1)">&#10095;</a>
+    </div>
+
+    <!-- Dot navigation -->
+    <div class="dot-container">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        <span class="dot" onclick="currentSlide(4)"></span>
+    </div>
+    <!-- Movie container-->
+<div class="movie-container">
+    {% for movie in movies %}
+    <div class="movie-card">
+        <img src="{{ movie['poster'] }}" alt="{{ movie['movieName'] }}">
+        <div class="hot-tag">HOT</div>
+        <div class="movie-info">
+            <div class="movie-title">{{ movie['movieName'] }}</div>
+            <div class="movie-details">
+                Thể loại: 
+                {% set genres = movie['genre'].split(', ') %}
+                {{ genres[0] }}{% if genres|length > 1 %}, {{ genres[1] }}{% endif %}<br>
+                Độ tuổi: {{ movie['rated'].split(' ')[0] }}<br>
+                Thời lượng: {{ movie['time'] }} phút
+            </div>
+            <a href="#" class="view-details-button">Xem chi tiết</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+<div class="pagination">
+    {% if page > 1 %}
+    <a href="?page={{ page - 1 }}">Previous</a>
+    {% endif %}
+    {% for p in range(1, total_pages + 1) %}
+    <a href="?page={{ p }}" class="{% if p == page %}active{% endif %}">{{ p }}</a>
+    {% endfor %}
+    {% if page < total_pages %}
+    <a href="?page={{ page + 1 }}">Next</a>
+    {% endif %}
+</div>
+<!--About us-->
+<div class="footer">
+    <p>Made by Nguyễn Tiến Đạt, Hoàng Phong, Nguyễn Bảo</p>
+    <p>Copyright © 2024 Popcorncinema</p>
+</div>
+<script src="/static/script.js"></script>
+
+</body>
+</html>
