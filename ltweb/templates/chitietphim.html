@@ -36,7 +36,7 @@
                 <p><strong>Khởi chiếu:</strong> {{ movie['date'] }}</p>
                 <p><strong>Thời lượng:</strong> {{ movie['time'] }} phút</p>
                 <p><strong>Ngôn ngữ:</strong> {{ movie['language'] }}</p>
-                <p><strong>Rated:</strong> {{ movie['rated'] }}</p>
+                <p><strong>Rated:</strong> {{ movie['rated'] }} </p>
                 <p><strong>Mô tả:</strong> {{ movie['description'] }}</p>
             </div>
 
@@ -61,40 +61,63 @@
         <div class="modal">
             <!-- Date Selection -->
             <h2>Chọn lịch chiếu</h2>
-            <div class="button-group">
-                <button>5/11</button>
-                <button>6/11</button>
-                <button>7/11</button>
-                <button>8/11</button>
-                <button>9/11</button>
-                <button>10/11</button>
+            <div class="button-group" id="dateSelection">
+                <button onclick="selectDate('5/11')">5/11</button>
+                <button onclick="selectDate('6/11')">6/11</button>
+                <button onclick="selectDate('7/11')">7/11</button>
+                <button onclick="selectDate('8/11')">8/11</button>
+                <button onclick="selectDate('9/11')">9/11</button>
+                <button onclick="selectDate('10/11')">10/11</button>
             </div>
-    
-            <!-- Time Selection -->
-            <h2>Chọn giờ chiếu</h2>
-            <div class="button-group">
-                <button>10:00</button>
-                <button>10:30</button>
-                <button>11:00</button>
+
+            <!-- Time Selection (Initially hidden) -->
+            <h2 id="timeLabel" style="display: none;">Chọn giờ chiếu</h2>
+            <div class="button-group" id="timeSelection" style="display: none;">
+                <button onclick="selectTime('10:00')">10:00</button>
+                <button onclick="selectTime('10:30')">10:30</button>
+                <button onclick="selectTime('11:00')">11:00</button>
             </div>
+
+            <!-- Confirm Booking Button (Initially hidden) -->
+            <button id="confirmButton" style="display: none; margin: 20px;" onclick="confirmBooking()">Xác nhận đặt vé</button>
         </div>
     </div>
 
     <!-- JavaScript for Modal and Form Toggle -->
     <script>
-        // Toggle booking modal visibility
+        let selectedDate = null;
+        let selectedTime = null;
+
         function toggleModal() {
             const modal = document.getElementById('bookingModal');
             modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'flex' : 'none';
         }
 
-        // Toggle review form visibility
         function toggleForm(formId) {
             const form = document.getElementById(formId);
             form.style.display = form.style.display === "none" ? "block" : "none";
         }
 
-        // Close modal when clicking outside of it
+        function selectDate(date) {
+            selectedDate = date;
+            document.getElementById('timeLabel').style.display = 'block';
+            document.getElementById('timeSelection').style.display = 'flex';
+        }
+
+        function selectTime(time) {
+            selectedTime = time;
+            document.getElementById('confirmButton').style.display = 'block';
+        }
+
+        function confirmBooking() {
+            if (selectedDate && selectedTime) {
+                alert(`Bạn đã chọn lịch chiếu vào ngày ${selectedDate} lúc ${selectedTime}.`);
+                toggleModal(); // Đóng modal sau khi xác nhận
+            } else {
+                alert("Vui lòng chọn lịch chiếu và giờ chiếu trước khi xác nhận.");
+            }
+        }
+
         window.onclick = function(event) {
             const modal = document.getElementById('bookingModal');
             if (event.target === modal) {
