@@ -6,20 +6,82 @@ body {
     padding: 0;
 }
 
-/* Header */
-header {
-    background-color: #333;
-    padding: 15px;
+/* navbar */
+.navbar a{
+    text-decoration: none;
+    color: #FFD700;
+}
+.navbar #logo {
+    height: 50px; 
+    margin-right: 10px;
+}
+.navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: #333;
+    color: white;
+    padding: 5px 5%; 
+    font-family: Arial, sans-serif;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1000;
 }
 
-header h1, header button {
-    color: white;
-    font-size: 24px;
-    margin: 0;
+.navbar .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
+    
+.navbar .logo-text {
+    display: inline-block; 
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.navbar img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+
+.navbar .menu {
+    display: flex;
+    font-size: 20px;
+    gap:5px;
+}
+
+.navbar .menu a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px; 
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+.navbar .menu a:hover {
+    color: #FFD700; 
+    border-radius: 4px; 
+}
+
+.navbar .right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.navbar .auth-links a {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.navbar .auth-links a:hover {
+    color: #EDA519; 
+}
+
 
 /* Nội dung trang */
 .content {
@@ -145,6 +207,12 @@ header h1, header button {
 }
 
 /* Modal style */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Thêm hiệu ứng vào overlay */
 .overlay {
     display: none; /* Initially hidden */
     position: fixed;
@@ -152,10 +220,11 @@ header h1, header button {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    background-color: rgba(0, 0, 0, 0.5);
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    animation: fadeIn 0.5s; /* Thời gian hiệu ứng fade-in */
 }
 
 /* Modal Content */
@@ -196,5 +265,30 @@ header h1, header button {
 
 /* Hiệu ứng khi rê chuột */
 .button-group button:hover {
+    background-color: #b57900; /* Màu đậm hơn khi rê chuột */
+}
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px; /* Khoảng cách giữa các nút */
+}
+#confirmButton {
+    display: none;
+    margin-top: 20px;
+    background-color: #EDA519;
+    border: 2px solid #4b2808;
+    color: #4b2808;
+    padding: 15px 30px;
+    font-size: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 130px;
+    transition: background-color 0.3s ease;
+    margin-left: auto; 
+    align-self: flex-end;
+}
+
+#confirmButton:hover {
     background-color: #b57900; /* Màu đậm hơn khi rê chuột */
 }

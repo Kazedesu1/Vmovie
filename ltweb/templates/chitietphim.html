@@ -7,14 +7,31 @@
     <link rel="stylesheet" href="/static/chitietphim.css">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <button>&#9776; Menu</button>
-        <h1>Chi Tiết Phim</h1>
-    </header>
+     <!-- Navbar -->
+     <div class="navbar">
+        <div class="left">
+            <a href="{{ url_for('homepage') }}">
+                <img id="logo" src="{{ url_for('static', filename='logo2.svg') }}" alt="PopcornCinema Logo">
+                <div class="logo-text">POPCORNCINEMA</div>
+            </a>
+        </div>
+        
+        <div class="menu">
+            <a href="#">RẠP PHIM</a>
+            <a href="#">VÉ CỦA TÔI</a>
+            <a href="#">TIN MỚI VÀ ƯU ĐÃI</a>
+        </div>
+        
+        <div class="right">
+            <div class="auth-links">
+                <a href="#">Đăng nhập</a> | 
+                <a href="#">Đăng ký</a>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Content -->
-    <div class="content">
+    <div class="content" style="margin-top: 80px">
         <div class="movie-details">
             <!-- Movie Image -->
             <div class="movie-image">
@@ -58,30 +75,30 @@
 
     <!-- Booking Modal -->
     <div class="overlay" id="bookingModal">
-        <div class="modal">
-            <!-- Date Selection -->
-            <h2>Chọn lịch chiếu</h2>
-            <div class="button-group" id="dateSelection">
-                <button onclick="selectDate('5/11')">5/11</button>
-                <button onclick="selectDate('6/11')">6/11</button>
-                <button onclick="selectDate('7/11')">7/11</button>
-                <button onclick="selectDate('8/11')">8/11</button>
-                <button onclick="selectDate('9/11')">9/11</button>
-                <button onclick="selectDate('10/11')">10/11</button>
-            </div>
-
-            <!-- Time Selection (Initially hidden) -->
-            <h2 id="timeLabel" style="display: none;">Chọn giờ chiếu</h2>
-            <div class="button-group" id="timeSelection" style="display: none;">
-                <button onclick="selectTime('10:00')">10:00</button>
-                <button onclick="selectTime('10:30')">10:30</button>
-                <button onclick="selectTime('11:00')">11:00</button>
-            </div>
-
-            <!-- Confirm Booking Button (Initially hidden) -->
-            <button id="confirmButton" style="display: none; margin: 20px;" onclick="confirmBooking()">Xác nhận đặt vé</button>
+    <div class="modal">
+        <!-- Date Selection -->
+        <h2>Chọn lịch chiếu</h2>
+        <div class="button-group" id="dateSelection">
+            <button onclick="selectDate('5/11')">5/11</button>
+            <button onclick="selectDate('6/11')">6/11</button>
+            <button onclick="selectDate('7/11')">7/11</button>
+            <button onclick="selectDate('8/11')">8/11</button>
+            <button onclick="selectDate('9/11')">9/11</button>
+            <button onclick="selectDate('10/11')">10/11</button>
         </div>
+
+        <!-- Time Selection -->
+        <h2 id="timeLabel" style="display: none;">Chọn giờ chiếu</h2>
+        <div class="button-group" id="timeSelection" style="display: none;">
+            <button onclick="selectTime('10:00')">10:00</button>
+            <button onclick="selectTime('10:30')">10:30</button>
+            <button onclick="selectTime('11:00')">11:00</button>
+        </div>
+
+        <!-- Confirm Booking Button -->
+        <button id="confirmButton" style="display: none;" onclick="confirmBooking()">Xác nhận đặt vé</button>
     </div>
+</div>
 
     <!-- JavaScript for Modal and Form Toggle -->
     <script>
@@ -90,7 +107,7 @@
 
         function toggleModal() {
             const modal = document.getElementById('bookingModal');
-            modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'flex' : 'none';
+             modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'flex' : 'none';
         }
 
         function toggleForm(formId) {
@@ -124,6 +141,7 @@
                 modal.style.display = 'none';
             }
         };
+        
     </script>
 </body>
 </html>
