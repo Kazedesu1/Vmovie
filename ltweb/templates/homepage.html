@@ -78,7 +78,9 @@
                 Độ tuổi: {{ movie['rated'].split(' ')[0] }}<br>
                 Thời lượng: {{ movie['time'] }} phút
             </div>
-            <a href="#" class="view-details-button">Xem chi tiết</a>
+            <a href="{{ url_for('movie_detail', movie_id=movie['IDmovie']) }}" class="view-details-button">
+                <button>Xem Chi Tiết</button>
+            </a>
         </div>
     </div>
     {% endfor %}

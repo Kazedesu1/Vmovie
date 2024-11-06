@@ -79,7 +79,7 @@ body {
 }
 
 .navbar .auth-links a:hover {
-    color: #FFD700; 
+    color: #EDA519; 
 }
 
 
@@ -217,7 +217,7 @@ body {
     font-weight: bold;
     font-size: 16px;
     margin: 10px 0;
-    color: #FFD700;
+    color: #EDA519;
 }
 
 .movie-details {
@@ -226,10 +226,10 @@ body {
     margin-bottom: 15px;
 }
 
-.view-details-button {
+.view-details-button button{
     display: inline-block;
     padding: 10px 25px;
-    background-color: #007bff; 
+    background-color: #EDA519; 
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -237,8 +237,8 @@ body {
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.view-details-button:hover {
-    background-color: #0056b3; 
+.view-details-button button:hover {
+    background-color: #b57900; 
     transform: translateY(-2px); 
 }
 

@@ -27,7 +27,7 @@ def get_movies(page=1, per_page=10):
     # Tính toán vị trí bắt đầu (offset) cho phân trang
     offset = (page - 1) * per_page
     
-    cursor.execute("SELECT poster, movieName, genre, time, rated FROM movie LIMIT ? OFFSET ?", (per_page, offset))
+    cursor.execute("SELECT * FROM movie LIMIT ? OFFSET ?", (per_page, offset))
     movies = cursor.fetchall()
     
     cursor.execute("SELECT COUNT(*) FROM movie")
