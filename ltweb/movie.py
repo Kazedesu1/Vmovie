@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, g,redirect,session,url_for,flash, jsonify
 import sqlite3
+from datetime import datetime
+
 
 app = Flask(__name__)
 DATABASE = 'cinema.db'
@@ -138,10 +140,6 @@ def book_seats():
     selected_seats = request.json.get('selectedSeats')
     customer_id = session.get('customerID')
     
-    # Update SeatBooking table
-    for seat_id in selected_seats:
-        cursor.execute("UPDATE SeatBooking SET status = 1 WHERE bookingID = ?", (seat_id,))
-
     # Insert tickets into Ticket table
     for seat_id in selected_seats:
         cursor.execute("INSERT INTO Ticket (ticketID, bookingID, customerID) VALUES (?, ?, ?)", 
@@ -211,13 +209,84 @@ def rap():
 # Route my ticket
 @app.route('/myticket')
 def myticket():
-    db = get_db()
     customer_id = session.get('customerID')
-    if not customer_id:
-        return redirect(url_for('login_page'))  
     
-    tickets = db.execute("SELECT * FROM Ticket WHERE customerID = ?", (customer_id,)).fetchall()
-    return render_template('myticket.html', tickets=tickets)
+    if not customer_id:
+        return redirect(url_for('login_page'))
+
+    db = get_db()
+    query = """
+    SELECT 
+        Ticket.ticketID, 
+        SeatBooking.seatID,
+        Showtime.showDate,
+        Showtime.showTime,
+        Movie.movieName,
+        Movie.poster,
+        SeatBooking.status
+    FROM Ticket
+    JOIN SeatBooking ON Ticket.bookingID = SeatBooking.bookingID
+    JOIN Showtime ON SeatBooking.showtimeID = Showtime.showtimeID
+    JOIN Movie ON Showtime.IDmovie = Movie.IDmovie
+    WHERE Ticket.customerID = ?
+    """
+    tickets = db.execute(query, (customer_id,)).fetchall()
+
+    formatted_tickets = []
+    for ticket in tickets:
+        show_time = datetime.strptime(ticket['showTime'], '%H:%M')
+        ticket_info = {
+            'ticketID': ticket['ticketID'],
+            'seatID': ticket['seatID'],
+            'showDate': ticket['showDate'],
+            'showTime': ticket['showTime'],
+            'movieName': ticket['movieName'],
+            'poster': ticket['poster'],
+            'status': 'Paid' if ticket['status'] == "1" else 'Unpaid',
+            'price': '75,000 VND' if show_time.hour >= 22 else '100,000 VND'
+        }
+        formatted_tickets.append(ticket_info)
+
+    return render_template('myticket.html', tickets=formatted_tickets)
+
+# Route to confirm payment
+@app.route('/confirm_payment/<int:ticket_id>', methods=['POST'])
+def confirm_payment(ticket_id):
+    db = get_db()
+    db.execute("""
+        UPDATE SeatBooking 
+        SET status = 1 
+        WHERE bookingID = (SELECT bookingID FROM Ticket WHERE ticketID = ?)
+    """, (ticket_id,))
+    db.commit()
+    print(f"Ticket with ID {ticket_id} has been marked as paid.")
+    return {"success": True}
+
+# Route xóa vé
+@app.route('/delete_ticket/<int:ticket_id>', methods=['POST'])
+def delete_ticket(ticket_id):
+    db = get_db()
+    ticket_status = db.execute("""
+        SELECT status FROM SeatBooking
+        WHERE bookingID = (SELECT bookingID FROM Ticket WHERE ticketID = ?)
+    """, (ticket_id,)).fetchone()
+    
+    if ticket_status and ticket_status['status'] == "0":
+        db.execute("""
+            UPDATE SeatBooking 
+            SET status = 0 -- Hoặc giá trị khác để thể hiện vé bị hủy
+            WHERE bookingID = (SELECT bookingID FROM Ticket WHERE ticketID = ?)
+        """, (ticket_id,))
+
+        db.execute("DELETE FROM Ticket WHERE ticketID = ?", (ticket_id,))
+        db.commit()
+        return {"success": True}
+    else:
+        # Nếu vé đã thanh toán hoặc không tồn tại
+        return {"success": False, "message": "Ticket already paid, cannot delete."}
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

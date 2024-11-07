@@ -6,7 +6,7 @@ body {
     padding-top: 70px;
 }
 
-/* navbar */
+/* Navbar styling */
 .navbar a{
     text-decoration: none;
     color: #FFD700;
@@ -14,7 +14,9 @@ body {
 .navbar #logo {
     height: 50px; 
     margin-right: 10px;
+    margin-top: 5px;
 }
+
 .navbar {
     display: flex;
     align-items: center;
@@ -40,6 +42,8 @@ body {
     display: inline-block; 
     font-size: 30px;
     font-weight: bold;
+    top: -10px;
+    position: relative;
 }
 
 .navbar img {
@@ -79,7 +83,7 @@ body {
 }
 
 .navbar .auth-links a:hover {
-    color: #FFD700;
+    color: #FFD700; 
 }
 
 

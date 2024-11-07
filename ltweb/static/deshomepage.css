@@ -14,7 +14,9 @@ body {
 .navbar #logo {
     height: 50px; 
     margin-right: 10px;
+    margin-top: 5px;
 }
+
 .navbar {
     display: flex;
     align-items: center;
@@ -40,6 +42,8 @@ body {
     display: inline-block; 
     font-size: 30px;
     font-weight: bold;
+    top: -10px;
+    position: relative;
 }
 
 .navbar img {
@@ -229,8 +233,8 @@ body {
 .view-details-button {
     display: inline-block;
     padding: 10px 25px;
-    background-color: #007bff; 
-    color: white;
+    background-color: #FFD700; 
+    color: black;
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
@@ -238,7 +242,6 @@ body {
 }
 
 .view-details-button:hover {
-    background-color: #0056b3; 
     transform: translateY(-2px); 
 }
 
@@ -258,19 +261,19 @@ body {
 .pagination a {
     margin: 0 5px;
     padding: 5px 10px;
-    background-color: #333;
-    color: white;
+    background-color: #FFD700; 
+    color: black;
     text-decoration: none;
     border-radius: 5px;
 }
 
 .pagination a.active {
-    background-color: #007bff;
-    color: white;
+    background-color: #f0ad4e; 
 }
 
 .pagination a:hover {
     background-color: #555; 
+    color: #FFD700;
 }
 
 
