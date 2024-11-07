@@ -126,9 +126,7 @@ h2 {
     transition: background-color 0.3s;
 }
 
-.seat.enabled:hover {
-    background-color: #45a049;
-}
+
 
 /* Ghế đã được đặt, không thể chọn */
 .seat.disabled {

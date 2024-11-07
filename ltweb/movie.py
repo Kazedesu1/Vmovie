@@ -59,19 +59,63 @@ def movie_detail(movie_id):
     db = get_db()
     cur = db.execute('SELECT * FROM movie WHERE IDmovie = ?', (movie_id,))
     cur2 = db.execute('SELECT DISTINCT showDate FROM Showtime WHERE IDmovie = ?', (movie_id,))
+    cur3 = db.execute('SELECT * FROM comment JOIN Customer ON comment.customerID = customer.customerID WHERE IDmovie = ?',(movie_id,))
+    comments = cur3.fetchall()
     showdates = cur2.fetchall()
     movie = cur.fetchone()
     showtimes = None
+    dtb = 0 
+    i= 0
+    if not comments:
+        i= 1
+        
+    for comment in comments:
+        dtb += comment['diem']
+        i+=1
+    dtb = round(dtb/i, 2)
     if movie is None:
         return "Movie not found", 404
 
     # Handle POST request to fetch showtimes
     if request.method == 'POST':
         show_date = request.form['showDate']
-        cur3 = db.execute('SELECT showTime, showtimeID FROM Showtime WHERE IDmovie = ? AND showDate = ?', (movie_id, show_date))
+        cur3 = db.execute('SELECT showTime, showtimeID FROM Showtime WHERE IDmovie = ? AND showDate = ?', (movie_id, show_date,))
         showtimes = cur3.fetchall()
 
-    return render_template('chitietphim.html', movie=movie, showdates=showdates, showtimes=showtimes)
+    return render_template('chitietphim.html', movie=movie, showdates=showdates, showtimes=showtimes,comments=comments,dtb=dtb)
+
+@app.route('/submit_review', methods=['POST'])
+def submit_review():
+    if 'customerID' not in session:
+        return jsonify({"success": False, "error": "User not logged in"}), 401
+
+    data = request.json
+    rating = int(data.get('rating'))
+    comment = data.get('comment')
+    movie_id = data.get('movieId')
+    customer_id = session['customerID']  
+
+    db = get_db()
+    cur = db.execute(
+        'SELECT * FROM comment WHERE customerID = ? AND IDmovie = ?',(customer_id, movie_id)
+    )
+    existing_review = cur.fetchone()
+
+    if existing_review:
+        db.execute(
+            'UPDATE comment SET diem = ? , binhluan = ? WHERE customerID = ? and IDmovie = ?',
+            (rating,comment, customer_id, movie_id)
+        )
+        db.commit()
+    else:
+        db.execute(
+            'INSERT INTO comment (customerID, IDmovie, diem, binhluan) VALUES (?, ?, ?, ?)',
+            (customer_id, movie_id, rating, comment)
+        )
+        db.commit()
+
+    return jsonify({"success": True})
+
 
 @app.route('/<int:movie_id>/<int:showtime_id>', methods=['GET', 'POST'])
 def book_ticket(movie_id, showtime_id):
