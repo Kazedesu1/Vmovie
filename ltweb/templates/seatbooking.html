@@ -92,7 +92,7 @@
                     class="seat {% if seat['status'] == '1' %}disabled{% else %}enabled{% endif %}" 
                     {% if seat['status'] == '1' %}disabled{% endif %}
                     onclick="selectSeat(this, {{ seat[0] }})">
-                    {{ seat[0] }}
+                    {{ seat['seatID'] }}
                 </button>
             {% endfor %}
         </div>
