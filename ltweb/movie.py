@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, g,redirect,session,url_for,flash
+from flask import Flask, render_template, request, g,redirect,session,url_for,flash, jsonify
 import sqlite3
 
 app = Flask(__name__)
@@ -54,12 +54,58 @@ def homepage():
     return render_template('homepage.html', movies=movies, page=page, total_pages=total_pages)
 
 # Route chi tiết phim
-@app.route('/<int:movie_id>')
+@app.route('/<int:movie_id>', methods=['GET', 'POST'])
 def movie_detail(movie_id):
-    movie = get_movie_details(movie_id)
+    db = get_db()
+    cur = db.execute('SELECT * FROM movie WHERE IDmovie = ?', (movie_id,))
+    cur2 = db.execute('SELECT DISTINCT showDate FROM Showtime WHERE IDmovie = ?', (movie_id,))
+    showdates = cur2.fetchall()
+    movie = cur.fetchone()
+    showtimes = None
     if movie is None:
         return "Movie not found", 404
-    return render_template('chitietphim.html', movie=movie)
+
+    # Handle POST request to fetch showtimes
+    if request.method == 'POST':
+        show_date = request.form['showDate']
+        cur3 = db.execute('SELECT showTime, showtimeID FROM Showtime WHERE IDmovie = ? AND showDate = ?', (movie_id, show_date))
+        showtimes = cur3.fetchall()
+
+    return render_template('chitietphim.html', movie=movie, showdates=showdates, showtimes=showtimes)
+
+@app.route('/<int:movie_id>/<int:showtime_id>', methods=['GET', 'POST'])
+def book_ticket(movie_id, showtime_id):
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM SeatBooking WHERE showtimeID = ?", (showtime_id,))
+    cur = db.execute('SELECT * FROM movie WHERE IDmovie = ?', (movie_id,))
+    cur3 = db.execute('SELECT * FROM Showtime WHERE IDmovie = ? AND showtimeID = ?', (movie_id, showtime_id))
+    showtime = cur3.fetchone()
+    movie = cur.fetchone()
+
+    seats = cursor.fetchall()
+    return render_template('seatbooking.html', seats=seats, movie=movie, showtime=showtime)
+
+@app.route('/book_seats', methods=['POST'])
+def book_seats():
+    db = get_db()
+    cursor = db.cursor()
+
+    selected_seats = request.json.get('selectedSeats')
+    customer_id = session.get('customerID')
+    
+    # Update SeatBooking table
+    for seat_id in selected_seats:
+        cursor.execute("UPDATE SeatBooking SET status = 1 WHERE bookingID = ?", (seat_id,))
+
+    # Insert tickets into Ticket table
+    for seat_id in selected_seats:
+        cursor.execute("INSERT INTO Ticket (ticketID, bookingID, customerID) VALUES (?, ?, ?)", 
+                       (seat_id, seat_id, customer_id))
+
+    db.commit()
+
+    return jsonify({"success": True})
 
 # Route hiển thị Login và Signup
 @app.route('/login_page')

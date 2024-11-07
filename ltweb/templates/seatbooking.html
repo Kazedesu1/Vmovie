@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Ghế Xem Phim</title>
+    <link rel="stylesheet" href="/static/seatbooking.css">
+    <script>
+        let selectedSeats = [];
+        let ticketPrice = 100000;
+
+        function selectSeat(button, seatId) {
+            if (button.classList.contains('selected')) {
+                button.classList.remove('selected');
+                selectedSeats = selectedSeats.filter(id => id !== seatId);
+            } else {
+                button.classList.add('selected');
+                selectedSeats.push(seatId);
+            }
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const totalSeats = selectedSeats.length;
+            const totalPrice = totalSeats * ticketPrice;
+            document.getElementById('total-seats').textContent = totalSeats;
+            document.getElementById('total-price').textContent = totalPrice.toLocaleString() + ' VND';
+        }
+
+        function proceedBooking() {
+            fetch('/book_seats', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ selectedSeats: selectedSeats }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Đặt ghế thành công!");
+                    window.location.href = "{{ url_for('myticket') }}";
+                } else {
+                    alert("Đã xảy ra lỗi! Vui lòng thử lại.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Đã xảy ra lỗi! Vui lòng thử lại.");
+            });
+        }
+    </script>
+    <div class="navbar">
+        <div class="left">
+            <a href="{{ url_for('homepage') }}">
+                <img id="logo" src="{{ url_for('static', filename='logo2.svg') }}" alt="PopcornCinema Logo">
+                <div class="logo-text">POPCORNCINEMA</div>
+            </a>
+        </div>
+        
+        <div class="menu">
+            <a href="{{ url_for('rap') }}">RẠP PHIM</a>
+            <a href="{{ url_for('myticket') }}">VÉ CỦA TÔI</a>
+        </div>
+        
+        <div class="right">
+            <div class="auth-links">
+                {% if session.get('customerName') %}
+                    <span>Hello, {{ session['customerName'] }}</span> |
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login_page', form='login') }}">Đăng nhập</a> |
+                    <a href="{{ url_for('login_page', form='signup') }}">Đăng ký</a>
+                {% endif %}
+            </div>
+        </div>                                        
+        </div>
+    </div>
+</head>
+
+
+<body>
+    <div class="container">
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="screen">Màn hình</div>
+        <div class="seat-container">
+            {% for seat in seats %}
+                <button 
+                    class="seat {% if seat['status'] == '1' %}disabled{% else %}enabled{% endif %}" 
+                    {% if seat['status'] == '1' %}disabled{% endif %}
+                    onclick="selectSeat(this, {{ seat[0] }})">
+                    {{ seat[0] }}
+                </button>
+            {% endfor %}
+        </div>
+
+        <div class="summary">
+            <div class="movie-image">
+                <img src="{{ movie['poster'] }}" alt="Poster của {{ movie['name'] }}">
+            </div>
+            <p><strong>Ngày chiếu:</strong> <span id="showDate">{{ showtime['showDate'] }}</span></p>
+            <p><strong>Giờ chiếu:</strong> <span id="showTime">{{ showtime['showTime'] }}</span></p>
+            <p><strong>Số ghế đã chọn:</strong> <span id="total-seats">0</span></p>
+            <p><strong>Tổng tiền:</strong> <span id="total-price">0 VND</span></p>
+            <button class="next-button" onclick="proceedBooking()">Tiếp tục</button>
+        </div>
+    </div>
+</body>
+</html>

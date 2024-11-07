@@ -78,32 +78,41 @@
     </div>
 
     <!-- Booking Modal -->
-    <div class="overlay" id="bookingModal">
+    <div class="overlay" id="bookingModal" style="display: none;">
+        {% if showtimes %}
+            <script>
+                const modal = document.getElementById('bookingModal');
+                modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'flex' : 'none';
+            </script>
+        {% endif %}
+        
         <div class="modal">
             <!-- Date Selection -->
             <h2>Chọn lịch chiếu</h2>
-            <div class="button-group" id="dateSelection">
-                <button onclick="selectDate('5/11')">5/11</button>
-                <button onclick="selectDate('6/11')">6/11</button>
-                <button onclick="selectDate('7/11')">7/11</button>
-                <button onclick="selectDate('8/11')">8/11</button>
-                <button onclick="selectDate('9/11')">9/11</button>
-                <button onclick="selectDate('10/11')">10/11</button>
-            </div>
-
+            <form method="POST" action="{{ url_for('movie_detail', movie_id=movie['IDmovie']) }}">
+                <div class="button-group" id="dateSelection">
+                    {% for showdate in showdates %}
+                        <button type="submit" name="showDate" value="{{ showdate['showDate'] }}">{{ showdate['showDate'] }}</button>
+                    {% endfor %}
+                </div>
+            </form>
+    
             <!-- Time Selection (Initially hidden) -->
-            <h2 id="timeLabel" style="display: none;">Chọn giờ chiếu</h2>
-            <div class="button-group" id="timeSelection" style="display: none;">
-                <button onclick="selectTime('10:00')">10:00</button>
-                <button onclick="selectTime('10:30')">10:30</button>
-                <button onclick="selectTime('11:00')">11:00</button>
-            </div>
-
+            {% if showtimes %}
+                <h2 id="timeLabel">Chọn giờ chiếu</h2>
+                <div class="button-group" id="timeSelection">
+                    {% for showtime in showtimes %}
+                    <form method="POST" action="{{ url_for('book_ticket', movie_id=movie['IDmovie'], showtime_id=showtime['showtimeID']) }}">
+                        <button type="submit">{{ showtime['showTime'] }}</button>
+                    </form>
+                    {% endfor %}
+                </div>
+            {% endif %}
+    
             <!-- Confirm Booking Button (Initially hidden) -->
             <button id="confirmButton" style="display: none; margin: 20px;" onclick="confirmBooking()">Xác nhận đặt vé</button>
         </div>
     </div>
-
     <!--About us-->
     <div class="footer">
         <p>Made by Nguyễn Tiến Đạt, Hoàng Phong, Nguyễn Bảo</p>
@@ -125,24 +134,13 @@
             form.style.display = form.style.display === "none" ? "block" : "none";
         }
 
-        function selectDate(date) {
-            selectedDate = date;
+        function selectDate() {
             document.getElementById('timeLabel').style.display = 'block';
             document.getElementById('timeSelection').style.display = 'flex';
         }
 
-        function selectTime(time) {
-            selectedTime = time;
+        function selectTime() {
             document.getElementById('confirmButton').style.display = 'block';
-        }
-
-        function confirmBooking() {
-            if (selectedDate && selectedTime) {
-                alert(`Bạn đã chọn lịch chiếu vào ngày ${selectedDate} lúc ${selectedTime}.`);
-                toggleModal(); // Đóng modal sau khi xác nhận
-            } else {
-                alert("Vui lòng chọn lịch chiếu và giờ chiếu trước khi xác nhận.");
-            }
         }
 
         window.onclick = function(event) {
@@ -151,6 +149,7 @@
                 modal.style.display = 'none';
             }
         };
+    
     </script>
 </body>
 </html>
