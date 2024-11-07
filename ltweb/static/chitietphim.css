@@ -3,7 +3,7 @@ body {
     background-color: #1e1e1e;
     color: white;
     margin: 0;
-    padding: 0;
+    padding-top: 70px;
 }
 
 /* navbar */
@@ -79,7 +79,7 @@ body {
 }
 
 .navbar .auth-links a:hover {
-    color: #EDA519; 
+    color: #FFD700;
 }
 
 
@@ -291,4 +291,15 @@ body {
 
 #confirmButton:hover {
     background-color: #b57900; /* Màu đậm hơn khi rê chuột */
+}
+
+/* Footer */
+.footer{
+    
+    background-color:rgba(38, 38, 38,0.8);
+    color: #FFD700;
+    height: 120px;
+    text-align: center;
+    padding-top: 3vh;
+    bottom: 0;
 }

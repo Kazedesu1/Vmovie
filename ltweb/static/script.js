@@ -27,3 +27,23 @@ let slideIndex = 0;
 
         // Auto-slide every 5 seconds
         setInterval(() => { changeSlide(1); }, 5000);
+
+
+
+        function toggleForm(form) {
+            const formWrapper = document.getElementById('formWrapper');
+            if (form === 'signUp') {
+                formWrapper.style.transform = 'translateX(0)';
+            } else {
+                formWrapper.style.transform = 'translateX(-50%)';
+            }
+        }
+
+        // Check URL query parameter to show the correct form   
+        const urlParams = new URLSearchParams(window.location.search);
+        const form = urlParams.get('form');
+        if (form === 'signup') {
+            toggleForm('signUp');
+        } else {
+            toggleForm('login');
+        }

@@ -1,0 +1,172 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #1e1e1e;
+}
+
+
+/* Navbar styling */
+.navbar a{
+    text-decoration: none;
+    color: #FFD700;
+}
+.navbar #logo {
+    height: 50px; 
+    margin-right: 10px;
+}
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #333;
+    color: white;
+    padding: 5px 5%; 
+    font-family: Arial, sans-serif;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.navbar .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+    
+.navbar .logo-text {
+    display: inline-block; 
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.navbar img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+
+.navbar .menu {
+    display: flex;
+    font-size: 20px;
+    gap:5px;
+}
+
+.navbar .menu a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px; 
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+.navbar .menu a:hover {
+    color: #FFD700; 
+    border-radius: 4px; 
+}
+
+.navbar .right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.navbar .auth-links a {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.navbar .auth-links a:hover {
+    color: #FFD700;
+}
+
+
+/* Login and signup */
+.alert{
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.container {
+    width: 700px;
+    height: 400px;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+.form-wrapper {
+    display: flex;
+    width: 200%;
+    height: 100%;
+    transition: transform 0.6s ease;    
+}
+.form-section {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.form-section.right {
+    padding: 20px;
+    background: white;
+}
+.form {
+    width: 80%;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form input[type="tel"] {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.form button {
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+}
+.form button:hover {
+    color: yellow;
+}
+.link {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+.link a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+.link a:hover {
+    text-decoration: underline;
+}
+
