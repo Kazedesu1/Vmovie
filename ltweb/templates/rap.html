@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PopcornCinema</title>
+    <link rel="icon" type="image/jpg" href="/static/logo.svg">
+    <link rel="stylesheet" href="/static/deshomepage.css">
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        min-height: 100vh;
+        margin: 0;
+    }
+        /* Header Section */
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        /* Centered Gallery Section */
+        .centered-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 800px;
+            justify-content: center;
+            margin: 20px 0; /* Add space between header and gallery */
+        }
+
+        /* Image Containers */
+        .image-container {
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-container:hover {
+            transform: scale(1.05);
+        }
+
+        /* Specific Sizes for Square and Rectangle Images */
+        .square {
+            width: 200px;
+            height: 200px;
+        }
+
+        .rectangle {
+            width: 400px;
+            height: 200px;
+        }
+        .footer {
+        width: 100%; 
+        position: relative;
+    }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="left">
+            <a href="{{ url_for('homepage') }}">
+                <img id="logo" src="{{ url_for('static', filename='logo2.svg') }}" alt="PopcornCinema Logo">
+                <div class="logo-text">POPCORNCINEMA</div>
+            </a>
+        </div>
+        
+        <div class="menu">
+            <a href="{{ url_for('rap') }}">RẠP PHIM</a>
+            <a href="{{ url_for('myticket') }}">VÉ CỦA TÔI</a>
+        </div>
+        
+        <div class="right">
+            <div class="auth-links">
+                {% if session.get('customerName') %}
+                    <span>Hello, {{ session['customerName'] }}</span> |
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login_page', form='login') }}">Đăng nhập</a> |
+                    <a href="{{ url_for('login_page', form='signup') }}">Đăng ký</a>
+                {% endif %}
+            </div>
+        </div>                                        
+    </div>
+
+    <!-- Header Section -->
+    <div class="header">
+        <h1>CÔNG NGHỆ</h1>
+        <p>Kết hợp toàn diện của 3 yếu tố (màn hình, âm thanh, ghế ngồi) nâng cấp trải nghiệm và cảm xúc khi xem phim</p>
+    </div>
+
+    <!-- Centered Image Gallery Section -->
+    <section class="centered-gallery">
+        <div class="image-container square">
+            <img src="{{ url_for('static', filename='/rap/rap1.jpg') }}" alt="Image 1">
+        </div>
+        <div class="image-container rectangle">
+            <img src="{{ url_for('static', filename='/rap/rap2.jpg') }}" alt="Image 2">
+        </div>
+        <div class="image-container rectangle">
+            <img src="{{ url_for('static', filename='/rap/rap3.jpg') }}" alt="Image 3">
+        </div>
+        <div class="image-container square">
+            <img src="{{ url_for('static', filename='/rap/rap4.png') }}" alt="Image 4">
+        </div>
+    </section>
+    <!--About us-->
+    <div class="footer">
+        <p>Made by Nguyễn Tiến Đạt, Hoàng Phong, Nguyễn Bảo</p>
+        <p>Copyright © 2024 Popcorncinema</p>
+    </div>
+</body>
+</html>

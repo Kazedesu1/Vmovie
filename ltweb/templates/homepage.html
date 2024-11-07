@@ -10,7 +10,6 @@
     </style>
 </head>
 <body>
-
     <!-- Navbar -->
     <div class="navbar">
         <div class="left">
@@ -21,16 +20,21 @@
         </div>
         
         <div class="menu">
-            <a href="#">RẠP PHIM</a>
-            <a href="#">VÉ CỦA TÔI</a>
-            <a href="#">TIN MỚI VÀ ƯU ĐÃI</a>
+            <a href="{{ url_for('rap') }}">RẠP PHIM</a>
+            <a href="{{ url_for('myticket') }}">VÉ CỦA TÔI</a>
         </div>
         
         <div class="right">
             <div class="auth-links">
-                <a href="#">Đăng nhập</a> | 
-                <a href="#">Đăng ký</a>
+                {% if session.get('customerName') %}
+                    <span>Hello, {{ session['customerName'] }}</span> |
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login_page', form='login') }}">Đăng nhập</a> |
+                    <a href="{{ url_for('login_page', form='signup') }}">Đăng ký</a>
+                {% endif %}
             </div>
+        </div>                                        
         </div>
     </div>
 
@@ -67,20 +71,19 @@
 <div class="movie-container">
     {% for movie in movies %}
     <div class="movie-card">
-        <img src="{{ movie['poster'] }}" alt="{{ movie['movieName'] }}">
+        <img src="{{ movie.poster }}" alt="{{ movie.movieName }}">
         <div class="hot-tag">HOT</div>
         <div class="movie-info">
-            <div class="movie-title">{{ movie['movieName'] }}</div>
-            <div class="movie-details">
-                Thể loại: 
-                {% set genres = movie['genre'].split(', ') %}
-                {{ genres[0] }}{% if genres|length > 1 %}, {{ genres[1] }}{% endif %}<br>
-                Độ tuổi: {{ movie['rated'].split(' ')[0] }}<br>
-                Thời lượng: {{ movie['time'] }} phút
-            </div>
-            <a href="{{ url_for('movie_detail', movie_id=movie['IDmovie']) }}" class="view-details-button">
-                <button>Xem Chi Tiết</button>
-            </a>
+            <div class="movie-title">{{ movie.movieName }}</div>
+                <div class="movie-details">
+                    Thể loại: 
+                    {% set genres = movie.genre.split(', ') %}
+                    {{ genres[0] }}{% if genres|length > 1 %}, {{ genres[1] }}{% endif %}<br>
+                    Độ tuổi: {{ movie.rated.split(' ')[0] }}<br>
+                    Thời lượng: {{ movie.time }} phút
+                </div>
+            <a href="{{ url_for('movie_detail', movie_id=movie['IDmovie']) }}" class="view-details-button">Xem chi tiết</a>
+
         </div>
     </div>
     {% endfor %}
@@ -98,6 +101,7 @@
     <a href="?page={{ page + 1 }}">Next</a>
     {% endif %}
 </div>
+
 <!--About us-->
 <div class="footer">
     <p>Made by Nguyễn Tiến Đạt, Hoàng Phong, Nguyễn Bảo</p>
