@@ -68,15 +68,22 @@ def movie_detail(movie_id):
     showtimes = None
     dtb = 0 
     i= 0
-    if not comments:
-        i= 1
+    
+
         
     for comment in comments:
         dtb += comment['diem']
         i+=1
-    dtb = round(dtb/i, 2)
+    if comments:
+        dtb = round(dtb/i, 2)
     if movie is None:
         return "Movie not found", 404
+    db.execute(
+            'UPDATE movie SET score = ? , voted = ? WHERE IDmovie = ?',
+            (dtb,i,movie_id)
+        )
+    db.commit()
+
 
     # Handle POST request to fetch showtimes
     if request.method == 'POST':
@@ -284,8 +291,21 @@ def delete_ticket(ticket_id):
     else:
         # Nếu vé đã thanh toán hoặc không tồn tại
         return {"success": False, "message": "Ticket already paid, cannot delete."}
+    
+@app.route('/bxh', methods=['GET'])
+def bxhpage():
+    sort_type = request.args.get('sort')
+    db = get_db()
 
+    if sort_type == 'rating':
+        cur = db.execute('SELECT * FROM movie ORDER BY score DESC')
+    elif sort_type == 'ratings_count':
+        cur = db.execute('SELECT * FROM movie ORDER BY voted DESC')
+    else:
+        cur = db.execute('SELECT * FROM movie')
 
+    movies = cur.fetchall()
+    return render_template('bxh.html', movies=movies)
 
 
 if __name__ == '__main__':

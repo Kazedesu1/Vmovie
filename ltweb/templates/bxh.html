@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng xếp hạng phim</title>
+    <style>
+        /* Navbar styling */
+        .navbar a{
+            text-decoration: none;
+            color: #FFD700;
+        }
+        .navbar #logo {
+            height: 50px; 
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #333;
+            color: white;
+            padding: 5px 5%; 
+            font-family: Arial, sans-serif;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        .navbar .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+            
+        .navbar .logo-text {
+            display: inline-block; 
+            font-size: 30px;
+            font-weight: bold;
+            top: -10px;
+            position: relative;
+        }
+
+        .navbar img {
+            height: 30px;
+            margin-right: 10px;
+        }
+
+
+        .navbar .menu {
+            display: flex;
+            font-size: 20px;
+            gap:5px;
+        }
+
+        .navbar .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px; 
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        .navbar .menu a:hover {
+            color: #FFD700; 
+            border-radius: 4px; 
+        }
+
+        .navbar .right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar .auth-links a {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .navbar .auth-links a:hover {
+            color: #FFD700; 
+        }
+                
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            margin: 0;
+            padding-top: 20px;
+        }
+
+        .sort-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .sort-buttons button {
+            background-color: #666;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .sort-buttons button:hover {
+            background-color: #555;
+        }
+
+        .movie-list {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .movie {
+            display: flex;
+            background: #2c2c2c;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .movie img {
+            width: 100px;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .movie-info {
+            flex: 1;
+        }
+
+        .movie-title {
+            font-size: 20px;
+            color: #ffcc00;
+            margin: 0;
+        }
+
+        .movie-meta {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .rating, .metascore {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .rating {
+            font-size: xx-large;
+            color: #f39c12;
+        }
+
+        .metascore {
+            color: #2ecc71;
+            background: #e8f5e9;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .description {
+            margin-top: 5px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="left">
+            <a href="{{ url_for('homepage') }}">
+                <img id="logo" src="{{ url_for('static', filename='logo2.svg') }}" alt="PopcornCinema Logo">
+                <div class="logo-text">POPCORNCINEMA</div>
+            </a>
+        </div>
+        
+        <div class="menu">
+            <a href="{{ url_for('rap') }}">RẠP PHIM</a>
+            <a href="{{ url_for('myticket') }}">VÉ CỦA TÔI</a>
+        </div>
+        
+        <div class="right">
+            <div class="auth-links">
+                {% if session.get('customerName') %}
+                    <span>Hello, {{ session['customerName'] }}</span> |
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login_page', form='login') }}">Đăng nhập</a> |
+                    <a href="{{ url_for('login_page', form='signup') }}">Đăng ký</a>
+                {% endif %}
+            </div>
+        </div>                                        
+        </div>
+    </div>
+</head>
+<body>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="sort-buttons">
+        <p>Sort By:</p>
+        <form method="get" action="{{ url_for('bxhpage') }}">
+            <button type="submit" name="sort" value="rating">User Rating</button>
+            <button type="submit" name="sort" value="ratings_count">Number of Ratings</button>
+        </form>
+    </div>
+    
+    <div class="movie-list">
+        {% for movie in movies %}
+        <div class="movie">
+            <img src="{{ movie['poster'] }}" alt="The Shawshank Redemption">
+            <div class="movie-info">
+                <h2 class="movie-title">{{ movie['movieName'] }}</h2>
+                <p class="movie-meta">{{ movie['date'] }} | {{ movie['time'] }} | {{ movie['rated'] }}</p>
+                <p><span class="rating">{{ movie['score'] }}</span> </p>
+                <p class="movie-meta"><span>Voted: {{ movie['voted'] }}</span></p>
+            </div>
+        </div>  
+        {% endfor %}
+    </div>
+    
+</body>
+</html>
