@@ -302,7 +302,7 @@ def bxhpage():
     elif sort_type == 'ratings_count':
         cur = db.execute('SELECT * FROM movie ORDER BY voted DESC')
     else:
-        cur = db.execute('SELECT * FROM movie')
+        cur = db.execute('SELECT * FROM movie ORDER BY score DESC')
 
     movies = cur.fetchall()
     return render_template('bxh.html', movies=movies)
